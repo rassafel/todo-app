@@ -84,6 +84,7 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           file: api/Dockerfile
+          context: "{{defaultContext}}:api"
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=gha
