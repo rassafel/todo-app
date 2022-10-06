@@ -1,0 +1,7 @@
+spring:
+  jackson:
+    default-property-inclusion: NON_NULL
+
+server:
+  shutdown: GRACEFUL
+  forward-headers-strategy: NATIVE
