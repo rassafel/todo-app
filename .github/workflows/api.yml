@@ -14,6 +14,8 @@ jobs:
 
   gradle-test:
     runs-on: ubuntu-latest
+    needs:
+      - gradle-build
     steps:
       - name: Checkout project sources
         uses: actions/checkout@v2
