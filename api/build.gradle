@@ -2,13 +2,32 @@ plugins {
     id 'idea'
     id 'java'
     id 'groovy'
-    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'org.springframework.boot' version '2.7.3'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 }
 
 group 'ru.rassafel'
 
 repositories {
     mavenCentral()
+}
+
+bootJar {
+    archiveClassifier = 'boot'
+}
+
+jar {
+    archiveClassifier = ''
+}
+
+sourceSets {
+    integration {
+        groovy.srcDir "$projectDir/src/integration/groovy"
+        java.srcDir "$projectDir/src/integration/java"
+        resources.srcDir "$projectDir/src/integration/resources"
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
 }
 
 idea {
@@ -20,7 +39,7 @@ idea {
 
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.boot:spring-boot-dependencies:2.7.3'
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
         mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2021.0.3'
         mavenBom 'io.awspring.cloud:spring-cloud-aws-dependencies:2.4.2'
         mavenBom 'org.codehaus.groovy:groovy-bom:3.0.12'
@@ -29,9 +48,13 @@ dependencyManagement {
 }
 
 configurations {
-    integrationTestImplementation.extendsFrom testImplementation
     compileOnly.extendsFrom annotationProcessor
-    testCompileOnly.extendsFrom testAnnotationProcessor
+    testCompileOnly.extendsFrom compileOnly
+    testAnnotationProcessor.extendsFrom testCompileOnly
+
+    integrationCompileOnly.extendsFrom testCompileOnly
+    integrationImplementation.extendsFrom testImplementation
+    integrationRuntime.extendsFrom testRuntime
 }
 
 dependencies {
@@ -50,6 +73,16 @@ dependencies {
     testImplementation 'org.spockframework:spock-core'
 }
 
-test {
+
+
+tasks.register('integrationTest', Test) {
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+    shouldRunAfter test
+}
+
+check.dependsOn integrationTest
+
+tasks.withType(Test) {
     useJUnitPlatform()
 }
