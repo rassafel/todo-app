@@ -68,7 +68,6 @@ jobs:
         with:
           images: |
             ghcr.io/rassafel/todo-api
-            rassafel/todo-api
           tags: |
             type=ref,event=branch
             type=ref,event=pr
