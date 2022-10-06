@@ -34,6 +34,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build_artifacts
+          path: api/build/libs
 
       - name: Run test
         run: ./api/gradlew -p api/ test --no-daemon
@@ -56,6 +57,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build_artifacts
+          path: api/build/libs
 
       - name: Run integration test
         run: ./api/gradlew -p api/ integrationTest --no-daemon
@@ -74,6 +76,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build_artifacts
+          path: api/build/libs
 
       - name: Prepare image tags
         id: prep
@@ -82,10 +85,10 @@ jobs:
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/v}
           fi
-          TAGS="${env.DOCKER_IMAGE}:${github.sha}"
-          TAGS="$TAGS,${env.DOCKER_IMAGE}:${GITHUB_REF#refs/heads/}-latest"
+          TAGS="${DOCKER_IMAGE}:${sha}"
+          TAGS="$TAGS,${DOCKER_IMAGE}:${GITHUB_REF#refs/heads/}-latest"
           if [[ $VERSION =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-            TAGS="$TAGS,${env.DOCKER_IMAGE}:latest"
+            TAGS="$TAGS,${DOCKER_IMAGE}:latest"
           fi
           echo ::set-output name=tags::${TAGS}
 
