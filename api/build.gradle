@@ -35,11 +35,11 @@ configurations {
 }
 
 dependencies {
-    implementation 'io.awspring.cloud:spring-cloud-starter-aws'
+//    implementation 'io.awspring.cloud:spring-cloud-starter-aws'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.liquibase:liquibase-core'
+//    implementation 'org.liquibase:liquibase-core'
 
-    implementation 'org.postgresql:postgresql'
+//    implementation 'org.postgresql:postgresql'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
