@@ -4,10 +4,10 @@ on:
     branches:
       - '**'
     tags:
-      - 'v*.*.*'
+      - 'v*'
   pull_request:
     branches:
-      - 'main'
+      - 'master'
 
 env:
   CI: true
