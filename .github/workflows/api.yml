@@ -34,6 +34,7 @@ jobs:
           path: api/build/reports/tests/integrationTest
 
       - name: Prepare to build image
+        id: prep
         run: |
           DOCKER_IMAGE=ghcr.io/rassafel/todo-api
           VERSION=edge
