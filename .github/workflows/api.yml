@@ -15,7 +15,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Build artifacts
-          path: build/libs
+          path: api/build/libs
 
       - name: Run test with Gradle Wrapper
         run: ./api/gradlew -p api/ test --no-daemon
