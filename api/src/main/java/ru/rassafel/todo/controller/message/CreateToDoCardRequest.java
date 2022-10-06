@@ -1,5 +1,6 @@
 package ru.rassafel.todo.controller.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,4 +21,10 @@ public class CreateToDoCardRequest implements IToDoCard {
     private String description;
     @JsonProperty(value = PROPERTY_PARENT_ID)
     private Long parentId;
+
+    @Override
+    @JsonIgnore
+    public Long getId() {
+        return null;
+    }
 }
