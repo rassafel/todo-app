@@ -1,0 +1,55 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id 'groovy'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+}
+
+group 'ru.rassafel'
+
+repositories {
+    mavenCentral()
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:2.7.3'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2021.0.3'
+        mavenBom 'io.awspring.cloud:spring-cloud-aws-dependencies:2.4.2'
+        mavenBom 'org.codehaus.groovy:groovy-bom:3.0.12'
+        mavenBom 'org.spockframework:spock-bom:2.2-groovy-3.0'
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    compileOnly.extendsFrom annotationProcessor
+    testCompileOnly.extendsFrom testAnnotationProcessor
+}
+
+dependencies {
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.liquibase:liquibase-core'
+
+    implementation 'org.postgresql:postgresql'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.codehaus.groovy:groovy'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.spockframework:spock-core'
+}
+
+test {
+    useJUnitPlatform()
+}
