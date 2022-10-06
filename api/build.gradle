@@ -20,6 +20,16 @@ jar {
     archiveClassifier = ''
 }
 
+sourceSets {
+    integration {
+        groovy.srcDir "$projectDir/src/integration/groovy"
+        java.srcDir "$projectDir/src/integration/java"
+        resources.srcDir "$projectDir/src/integration/resources"
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
 idea {
     module {
         downloadJavadoc = true
@@ -38,9 +48,13 @@ dependencyManagement {
 }
 
 configurations {
-    integrationTestImplementation.extendsFrom testImplementation
     compileOnly.extendsFrom annotationProcessor
-    testCompileOnly.extendsFrom testAnnotationProcessor
+    testCompileOnly.extendsFrom compileOnly
+    testAnnotationProcessor.extendsFrom testCompileOnly
+
+    integrationCompileOnly.extendsFrom testCompileOnly
+    integrationImplementation.extendsFrom testImplementation
+    integrationRuntime.extendsFrom testRuntime
 }
 
 dependencies {
@@ -59,6 +73,16 @@ dependencies {
     testImplementation 'org.spockframework:spock-core'
 }
 
-test {
+
+
+tasks.register('integrationTest', Test) {
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+    shouldRunAfter test
+}
+
+check.dependsOn integrationTest
+
+tasks.withType(Test) {
     useJUnitPlatform()
 }
