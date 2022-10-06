@@ -14,30 +14,21 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Run assemble
-        run: ./api/gradlew -p api/ assemble --no-daemon
+        run: ./api/gradlew -p api/ assemble --no-daemon --stacktrace
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build_artifacts
           path: api/build/libs
-
-  gradle-test:
-    runs-on: ubuntu-latest
-    needs:
-      - gradle-build
-    steps:
-      - name: Checkout project sources
-        uses: actions/checkout@v2
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-      - uses: actions/download-artifact@v2
+      - name: Upload build reports
+        uses: actions/upload-artifact@v3
         with:
-          name: build_artifacts
-          path: api/build/libs
+          name: build-reports
+          path: api/build/reports
 
       - name: Run test
-        run: ./api/gradlew -p api/ test --no-daemon
+        run: ./api/gradlew -p api/ test --no-daemon --stacktrace
 
       - name: Archive test report
         uses: actions/upload-artifact@v2
@@ -45,24 +36,10 @@ jobs:
           name: Test report
           path: api/build/reports/tests/test
 
-  gradle-integration-test:
-    runs-on: ubuntu-latest
-    needs:
-      - gradle-test
-    steps:
-      - name: Checkout project sources
-        uses: actions/checkout@v2
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: build_artifacts
-          path: api/build/libs
-
       - name: Run integration test
-        run: ./api/gradlew -p api/ integrationTest --no-daemon
+        run: ./api/gradlew -p api/ integrationTest --no-daemon --stacktrace
 
-      - name: Archive test report
+      - name: Archive integration test report
         uses: actions/upload-artifact@v2
         with:
           name: Integration test report
@@ -71,7 +48,7 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     needs:
-      - gradle-integration-test
+      - gradle-build
     steps:
       - name: Checkout project sources
         uses: actions/checkout@v2
