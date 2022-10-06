@@ -1,4 +1,4 @@
-API_IMAGE_NAME=rassafel/todo-api
+API_IMAGE_NAME=ghcr.io/rassafel/todo-api
 API_CONTAINER_NAME=todo-api
 
 api-build:
