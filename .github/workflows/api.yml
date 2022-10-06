@@ -29,7 +29,7 @@ jobs:
       - name: Archive test report
         uses: actions/upload-artifact@v2
         with:
-          name: Test report
+          name: API test report
           path: api/build/reports/tests/test
 
       - name: Run integration test
@@ -39,7 +39,7 @@ jobs:
       - name: Archive integration test report
         uses: actions/upload-artifact@v2
         with:
-          name: Integration test report
+          name: API integration test report
           path: api/build/reports/tests/integrationTest
 
       - name: Run assemble

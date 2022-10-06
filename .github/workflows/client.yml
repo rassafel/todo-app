@@ -41,7 +41,7 @@ jobs:
       - name: Archive test report
         uses: actions/upload-artifact@v2
         with:
-          name: Test report
+          name: Client test report
           path: client/lcov-report
 
       - name: Run assemble
