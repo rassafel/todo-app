@@ -21,11 +21,6 @@ jobs:
         with:
           name: build_artifacts
           path: api/build/libs
-      - name: Upload build reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-reports
-          path: api/build/reports
 
       - name: Run test
         run: ./api/gradlew -p api/ test --no-daemon --stacktrace
