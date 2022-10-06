@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Test report
-          path: build/reports/tests/test
+          path: api/build/reports/tests/test
 
   gradle-integration-test:
     runs-on: ubuntu-latest
@@ -43,8 +43,8 @@ jobs:
       - name: Archive test report
         uses: actions/upload-artifact@v2
         with:
-          name: Test report
-          path: build/reports/tests/integrationTest
+          name: Integration test report
+          path: api/build/reports/tests/integrationTest
 
   docker:
     runs-on: ubuntu-latest
