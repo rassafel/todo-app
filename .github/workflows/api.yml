@@ -6,90 +6,8 @@ env:
   CI: true
 
 jobs:
-  gradleValidation:
-    name: Gradle Wrapper
-    runs-on: ubuntu-latest
-    steps:
-      - name: Fetch Sources
-        uses: actions/checkout@v2
-
-      - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1
-
-  gradleTest:
-    name: Gradle run tests
-    needs: gradleValidation
-    runs-on: ubuntu-latest
-    container: gradle:jdk18-jammy
-    steps:
-      - name: Fetch sources
-        uses: actions/checkout@v2
-
-      - name: Setup Gradle dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-
-      - name: Setup Gradle wrapper cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Run tests
-        run: ./api/gradlew -p api/ test --no-daemon --stacktrace
-
-  gradleIntegrationTest:
-    name: Gradle run integration tests
-    needs: gradleTest
-    runs-on: ubuntu-latest
-    container: gradle:jdk18-jammy
-    steps:
-      - name: Fetch sources
-        uses: actions/checkout@v2
-
-      - name: Setup Gradle dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Run integration tests
-        run: ./api/gradlew -p api/ integrationTest --no-daemon --stacktrace
-
-  gradleBuild:
-    name: Gradle run integration tests
-    needs: gradleIntegrationTest
-    runs-on: ubuntu-latest
-    container: gradle:jdk18-jammy
-    steps:
-      - name: Fetch sources
-        uses: actions/checkout@v2
-
-      - name: Setup Gradle dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Run integration tests
-        run: ./api/gradlew -p api/ assemble --no-daemon --stacktrace
-
-
   gradle-build:
+    name: Gradle build and run tests
     runs-on: ubuntu-latest
     steps:
       - name: Fetch Sources
@@ -125,6 +43,7 @@ jobs:
           path: api/build/reports/tests/integrationTest
 
   docker-build:
+    name: Docker build and push image
     runs-on: ubuntu-latest
     needs:
       - gradle-build
