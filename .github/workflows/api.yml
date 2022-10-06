@@ -3,6 +3,7 @@ on: [ push, pull_request ]
 
 env:
   DOCKER_IMAGE: ghcr.io/rassafel/todo-api
+  CI: true
 
 jobs:
   gradle-build:
